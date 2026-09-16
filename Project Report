@@ -168,18 +168,16 @@ the system displays a budget warning.
 The program calculates the percentage contribution of appliances to total electricity consumption. Appliances contributing significantly are considered major sources.
 10.6 Saving Recommendations
 For high-consuming appliances, the system gives suggestions such as reducing unnecessary operating hours, switching appliances off when not required and considering energy-efficient alternatives.
-11. Sample Input & Output
 
-
-
-12. Limitations
+11. Limitations
 The current version has some limitations.
 The calculation is based on the wattage and average daily usage entered into the program.
 Appliance efficiency and standby consumption are not considered in detail.
 Recommendations are mainly rule-based.
 The current implementation does not use a trained machine learning model for prediction.
 It is currently a console application and does not have a graphical user interface.
-13. Future Scope
+
+12. Future Scope
 The project can be improved in several ways in the future.
 Machine Learning Prediction
 Historical electricity consumption data can be used to train a machine learning model to predict future electricity consumption.
