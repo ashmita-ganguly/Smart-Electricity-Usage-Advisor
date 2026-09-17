@@ -11,40 +11,6 @@ It requires no smart meters, sensors, or internet connection, and runs entirely 
 ### Application Workflow
 <img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/b92ba661-159e-466b-9a15-9c93cd49a4dc" />
 
-```
-Enter Budget
-      |
-      v
-Enter Electricity Rate
-      |
-      v
-Enter Number of Appliances
-      |
-      v
-Enter Appliance Details
-      |
-      v
-Calculate Monthly Consumption
-      |
-      v
-Calculate Estimated Bill
-      |
-      v
-Rank Appliances
-      |
-      v
-Check Budget
-      |
-      v
-Generate Recommendations
-      |
-      v
-Display Report
-      |
-      v
-Save Data
-```
-
 ## Features
 
 - Set a monthly budget and electricity rate at the start of each session
