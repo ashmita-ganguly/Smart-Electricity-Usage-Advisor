@@ -1,30 +1,67 @@
 # Smart Energy Advisor
 
-A command-line Java application that estimates monthly household electricity consumption and cost from appliance data, ranks appliances by usage, compares the projected bill against a budget, and generates personalized energy-saving recommendations.
+A command-line Java application that estimates monthly household electricity consumption and cost from appliance data, ranks appliances by usage, checks the estimated bill against a budget, and generates personalized energy-saving recommendations.
 
 ## Overview
 
-Most households know their appliance wattage and roughly how many hours a day each one runs, but have no easy way to turn that into a cost breakdown. Smart Energy Advisor takes that basic information — appliance name, wattage, daily usage hours, and quantity — and walks it through a full pipeline: monthly energy consumption → estimated electricity bill → ranking by consumption → budget comparison → identification of major consumption sources → personalized saving recommendations.
+Smart Energy Advisor walks the user through a straightforward console workflow: enter a monthly budget and the electricity rate, specify how many appliances to record, enter each appliance's details, and the application takes care of the rest — computing consumption, estimating the bill, ranking appliances, checking the result against the budget, generating saving recommendations, displaying a full report, and saving the session data for later reference.
 
-The tool requires no smart meters, sensors, or internet connection. It runs entirely offline from the terminal and produces a plain-text report that can be viewed on screen or saved to a file.
+It requires no smart meters, sensors, or internet connection, and runs entirely offline from the terminal.
+
+### Application Workflow
+
+```
+Enter Budget
+      |
+      v
+Enter Electricity Rate
+      |
+      v
+Enter Number of Appliances
+      |
+      v
+Enter Appliance Details
+      |
+      v
+Calculate Monthly Consumption
+      |
+      v
+Calculate Estimated Bill
+      |
+      v
+Rank Appliances
+      |
+      v
+Check Budget
+      |
+      v
+Generate Recommendations
+      |
+      v
+Display Report
+      |
+      v
+Save Data
+```
 
 ## Features
 
-- Add appliances interactively via console prompts, or load them in bulk from a CSV file
+- Set a monthly budget and electricity rate at the start of each session
+- Enter a fixed number of appliances with their wattage and daily usage hours
 - Calculate monthly energy consumption (kWh) per appliance and for the whole household
-- Estimate the monthly electricity bill using a configurable tariff rate
+- Calculate the estimated monthly electricity bill from the entered rate
 - Rank appliances from highest to lowest consumption
-- Compare the estimated bill against a user-defined monthly budget
-- Automatically identify the appliances responsible for the bulk of total consumption
-- Generate rule-based, appliance-specific saving recommendations (not generic tips)
-- Save the generated report to a file for later reference
+- Check the estimated bill against the entered budget and flag any overage
+- Generate rule-based, appliance-specific saving recommendations
+- Display a complete, formatted report in the terminal
+- Save the session's input and results for later reference
 
 ## Technologies / Tools Used
 
 - **Language:** Java (JDK 8+, no external libraries)
 - **Build:** Plain `javac` compilation — no Maven/Gradle required
-- **Input formats:** Interactive console input, CSV files
-- **Configuration:** `.properties` file for tariff rate, budget, and billing period
+- **Input:** Interactive console input
+- **Storage:** Local file output for saved session data
 - **Tested on:** OpenJDK 21, should work on JDK 8 and above
 
 ## Installation & Setup
@@ -63,89 +100,48 @@ javac -d out src\energy\*.java
 
 ## Running the Project
 
-### Interactive mode
-
 ```bash
 java -cp out energy.Main
 ```
 
-Follow the prompts to enter each appliance's name, wattage, daily usage hours, and quantity. Press Enter on a blank name to finish, then enter your monthly budget.
+You will be prompted in order:
 
-### CSV mode
+```
+Enter monthly budget: 2000
+Enter electricity rate (per kWh): 7.5
+Enter number of appliances: 3
+
+Appliance 1 name: Air Conditioner
+  Wattage (W): 1500
+  Daily usage (hours): 6
+
+Appliance 2 name: Refrigerator
+  Wattage (W): 150
+  Daily usage (hours): 24
+
+Appliance 3 name: LED Bulb
+  Wattage (W): 10
+  Daily usage (hours): 6
+```
+
+After the last appliance is entered, the report is calculated, displayed, and saved automatically.
+
+### Convenience script
 
 ```bash
-java -cp out energy.Main --input data/appliances.csv --budget 2000
+./run.sh     # Linux / macOS
+run.bat      # Windows
 ```
-
-### Save the report to a file
-
-```bash
-java -cp out energy.Main --input data/appliances.csv --budget 2000 --output report.txt
-```
-
-### Convenience scripts
-
-```bash
-./run.sh --input data/appliances.csv --budget 2000   # Linux / macOS
-run.bat --input data\appliances.csv --budget 2000    # Windows
-```
-
-### Command-line options
-
-| Option | Description |
-|---|---|
-| `-i`, `--input <path>` | Read appliances from a CSV file |
-| `-b`, `--budget <amt>` | Monthly budget for comparison |
-| `-r`, `--rate <amt>` | Tariff rate per kWh (overrides config) |
-| `-d`, `--days <n>` | Days in the billing period (default 30) |
-| `-o`, `--output <path>` | Save the report to a file |
-| `-h`, `--help` | Show usage information |
-
-### Configuration
-
-Defaults are read from `config.properties`:
-
-```properties
-tariff.rate=7.50
-monthly.budget=2000
-currency=INR
-days.in.month=30
-```
-
-### Input file format
-
-```csv
-name,wattage,hours_per_day,quantity
-Air Conditioner,1500,6,1
-Refrigerator,150,24,1
-LED Bulb,10,6,8
-```
-
-The `quantity` column is optional and defaults to 1.
 
 ## Testing Instructions
 
-A sample dataset is provided at `data/appliances.csv` for quick verification.
-
 1. Compile the project as described above.
-2. Run with the sample data and a low budget to test the **over-budget** path:
-   ```bash
-   java -cp out energy.Main --input data/appliances.csv --budget 1000
-   ```
-   Expect the status line to read `OVER BUDGET` along with a recommendation quantifying the required reduction.
-3. Run again with a high budget to test the **within-budget** path:
-   ```bash
-   java -cp out energy.Main --input data/appliances.csv --budget 10000
-   ```
-   Expect the status line to read `WITHIN BUDGET`.
-4. Test interactive mode by running `java -cp out energy.Main` with no arguments and entering a couple of appliances manually.
-5. Test invalid input handling: enter a wattage of `0` or usage hours above `24` — the appliance should be rejected with a validation message instead of crashing the program.
-6. Test malformed CSV handling: add a row to a copy of the CSV with a missing column and confirm it is skipped with a warning while the rest of the file still loads.
-7. Confirm the `--output` flag writes a copy of the report to disk, e.g.:
-   ```bash
-   java -cp out energy.Main --input data/appliances.csv --output report.txt
-   cat report.txt
-   ```
+2. Run the program and enter a **low budget** (e.g. 1000) with typical appliance data to confirm the report flags the result as over budget with a specific recommendation.
+3. Run again with a **high budget** (e.g. 10000) to confirm the report shows the result as within budget.
+4. Enter **0 appliances** when prompted and confirm the program handles it gracefully instead of crashing.
+5. Enter an **invalid wattage or usage value** (e.g. negative number, or hours above 24) and confirm the program rejects it with a clear message and re-prompts rather than crashing.
+6. After a successful run, confirm a data file has been saved (check the working directory for the output file) and that its contents match what was displayed on screen.
+7. Re-run the program a second time and confirm the previous save does not interfere with a new session's input.
 
 ## Sample Output
 
@@ -153,33 +149,33 @@ A sample dataset is provided at `data/appliances.csv` for quick verification.
 ================================================================
         SMART ENERGY CONSUMPTION REPORT
 ================================================================
-Total consumption   : 614.10 kWh
-Estimated bill      : 4605.75 INR
-Monthly budget      : 2000.00 INR
-Status              : OVER BUDGET by 2605.75 INR
+Budget              : 2000.00
+Electricity rate    : 7.50 per kWh
+Total consumption   : 421.20 kWh
+Estimated bill      : 3159.00
+Status              : OVER BUDGET by 1159.00
 
 APPLIANCES RANKED BY CONSUMPTION
-1. Air Conditioner    270.00 kWh   44.0%
-2. Refrigerator       108.00 kWh   17.6%
-3. Ceiling Fan          67.50 kWh   11.0%
+1. Air Conditioner    270.00 kWh   64.1%
+2. Refrigerator       108.00 kWh   25.6%
+3. LED Bulb              1.80 kWh    0.4%
 
-MAJOR SOURCES OF CONSUMPTION
-Air Conditioner, Refrigerator, Ceiling Fan (72.5% of total usage)
+RECOMMENDATIONS
+1. Air Conditioner accounts for 64% of total usage. Reducing
+   daily use by 2 hours would save approximately 90 kWh/month.
+2. Raise the Air Conditioner thermostat by 2 degrees to reduce
+   consumption by an estimated 10-15%.
 
-PERSONALIZED SAVING RECOMMENDATIONS
-1. Reducing Air Conditioner alone will not close the budget gap;
-   a cut of about 347 kWh is needed across appliances.
-2. Raise the Air Conditioner thermostat to 24-26 C — could save
-   roughly 405 INR per month.
+Report saved to session_report.txt
 ================================================================
 ```
 
 ## Screenshots
 
-_Add a terminal screenshot of the interactive input flow and the final report here, e.g.:_
+_Add a terminal screenshot of the input flow and the final report here, e.g.:_
 
 ```markdown
-![Interactive input](screenshots/interactive-input.png)
+![Input flow](screenshots/input-flow.png)
 ![Sample report](screenshots/report-output.png)
 ```
 
@@ -188,17 +184,17 @@ _Add a terminal screenshot of the interactive input flow and the final report he
 ```
 .
 ├── src/energy/
-│   ├── Main.java            # CLI entry point
+│   ├── Main.java            # CLI entry point and workflow driver
 │   ├── Appliance.java       # Appliance model
-│   ├── ApplianceUsage.java  # Computed consumption record
 │   ├── Calculator.java      # Consumption and bill calculations
-│   ├── Analyzer.java        # Ranking, budget comparison, major sources
+│   ├── Analyzer.java        # Ranking and budget check
 │   ├── Recommender.java     # Saving recommendations
-│   ├── ReportPrinter.java   # Report formatting
-│   ├── CsvLoader.java       # CSV parsing
-│   └── Config.java          # Configuration loading
-├── data/appliances.csv      # Sample input
-├── config.properties        # Tariff rate and defaults
+│   ├── ReportPrinter.java   # Report formatting and display
+│   └── DataStore.java       # Saves session data to file
 ├── run.sh / run.bat         # Compile-and-run helpers
 └── README.md
 ```
+
+## License
+
+MIT
