@@ -1,256 +1,68 @@
-import java.util.*;
+# Problem Statement
 
-public class SmartEnergyConsumption {
+Household electricity consumption in India has been rising steadily, yet most consumers lack awareness of which appliances contribute most to their electricity bills. Without visibility into per-appliance energy usage, users cannot make informed decisions about reducing consumption or staying within their monthly budgets.
 
-    public static void main(String[] args) {
+**The Smart Energy Consumption Advisor** addresses this problem by providing a console-based tool that allows users to input their household appliances, analyze per-appliance and total energy consumption, compare estimated bills against a monthly budget, and receive personalized recommendations for reducing electricity usage.
 
-        Scanner sc = new Scanner(System.in);
+---
 
-        String[] appliance = new String[20];
-        double[] watt = new double[20];
-        double[] hours = new double[20];
-        double[] monthlyUnits = new double[20];
+## Scope of the Project
 
-        int n = 0;
+This project focuses on:
 
-        System.out.println("WELCOME TO OUR SMART ENERGY CONSUMPTION ADVISOR");
+1. **Per-appliance energy tracking** — Users enter appliance name, wattage, and daily usage hours. The system computes monthly kWh consumption using the standard formula.
 
-        System.out.println("Enter the household appliance type:");
-        System.out.println("(Enter 'done' when you don't want to add more)");
+2. **Bill estimation** — Based on a user-provided electricity rate (Rs/kWh), the system estimates the total monthly electricity bill and cost per appliance.
 
-        while (true) {
+3. **Consumption analysis** — Appliances are ranked by consumption, classified into categories (Low/Medium/High/Very High), and analyzed with daily/monthly/yearly projections.
 
-            System.out.println("Enter appliance name: ");
-            String name = sc.nextLine();
+4. **Budget comparison** — The system compares the estimated bill against the user's monthly budget and provides surplus/deficit feedback.
 
-            if (name.equalsIgnoreCase("done")) {
-                break;
-            }
+5. **Energy-saving recommendations** — Personalized suggestions are generated for appliances that consume a disproportionate share of total energy.
 
-            appliance[n] = name;
+6. **Data persistence** — Appliance data can be saved to and loaded from CSV files. Full reports can be exported to text files.
 
-            System.out.print("Enter wattage of " + name + " (in Watts): ");
-            watt[n] = sc.nextDouble();
+### Out of Scope
 
-            System.out.print("Enter average usage per day in hours): ");
-            hours[n] = sc.nextDouble();
+- Real-time smart meter integration
+- Multi-user authentication
+- GUI / web interface
+- Database storage (uses CSV files)
 
-            // Monthly consumption calculation
-            monthlyUnits[n] = (watt[n] * hours[n] * 30) / 1000;
+---
 
-            n++;
+## Target Users
 
-            sc.nextLine();
+- **Household consumers** who want to understand and reduce their electricity bills
+- **Students and researchers** studying energy consumption patterns
+- **Budget-conscious families** looking to optimize appliance usage to stay within budget
+- **Energy auditors** performing basic residential energy assessments
 
-            if (n == 20) {
-                System.out.println("Maximum appliances.");
-                break;
-            }
-        }
+---
 
-        // If no appliances were entered
-        if (n == 0) {
-            System.out.println("No appliances entered.");
-            sc.close();
-            return;
-        }
+## High-Level Features
 
-        // ------------------------------------------------
-        // TOTAL ENERGY CONSUMPTION
-        // ------------------------------------------------
+1. **Appliance Management Module**
+   - Add multiple appliances with wattage and daily usage
+   - Load previously saved appliance data from CSV files
+   - Dynamic list with no hardcoded size limits
 
-        double totalUnits = 0;
+2. **Energy Calculation & Bill Estimation Module**
+   - Monthly energy consumption calculation per appliance
+   - Total household consumption aggregation
+   - Bill estimation based on configurable per-unit rate
+   - Percentage share breakdown of each appliance
 
-        for (int i = 0; i < n; i++) {
-            totalUnits = totalUnits + monthlyUnits[i];
-        }
+3. **Analysis & Recommendation Module**
+   - Appliance ranking by energy consumption
+   - Budget comparison with over/under analysis
+   - Consumption category classification
+   - Daily, monthly, and yearly consumption projections
+   - Peak consumer identification
+   - Personalized energy-saving recommendations
 
-        System.out.println("MONTHLY ENERGY USAGE");
-
-        for (int i = 0; i < n; i++) {
-
-            System.out.println(appliance[i] + " : "
-                    + String.format("%.2f", monthlyUnits[i])
-                    + " kWh/month");
-        }
-
-        System.out.println("Total Consumption = "
-                + String.format("%.2f", totalUnits) + " kWh");
-
-        // ------------------------------------------------
-        // ELECTRICITY BILL CALCULATION
-        // ------------------------------------------------
-
-        System.out.print("\nEnter electricity rate per unit (₹): ");
-        double rate = sc.nextDouble();
-
-        double estimatedBill = totalUnits * rate;
-
-        System.out.println("\nEstimated Electricity Bill = ₹"
-                + String.format("%.2f", estimatedBill));
-
-        // ------------------------------------------------
-        // APPLIANCE RANKING
-        // ------------------------------------------------
-
-        System.out.println("       APPLIANCES RANKED BY CONSUMPTION");
-
-        // Simple sorting
-        for (int i = 0; i < n - 1; i++) {
-
-            for (int j = i + 1; j < n; j++) {
-
-                if (monthlyUnits[j] > monthlyUnits[i]) {
-
-                    double temp = monthlyUnits[i];
-                    monthlyUnits[i] = monthlyUnits[j];
-                    monthlyUnits[j] = temp;
-
-                    String tempName = appliance[i];
-                    appliance[i] = appliance[j];
-                    appliance[j] = tempName;
-
-                    double tempWatt = watt[i];
-                    watt[i] = watt[j];
-                    watt[j] = tempWatt;
-
-                    double tempHour = hours[i];
-                    hours[i] = hours[j];
-                    hours[j] = tempHour;
-                }
-            }
-        }
-
-        for (int i = 0; i < n; i++) {
-
-            System.out.println((i + 1) + ". "
-                    + appliance[i] + " -> "
-                    + String.format("%.2f", monthlyUnits[i])
-                    + " kWh");
-        }
-
-        // ------------------------------------------------
-        // BUDGET COMPARISON
-        // ------------------------------------------------
-
-        System.out.print("\nEnter your monthly electricity budget (₹): ");
-        double budget = sc.nextDouble();
-
-        System.out.println("              BUDGET ANALYSIS");
-        if (estimatedBill > budget) {
-
-            double extra = estimatedBill - budget;
-
-            System.out.println("WARNING: Your estimated bill is above the budget.");
-            System.out.println("Budget = ₹" + budget);
-            System.out.println("Estimated Bill = ₹"
-                    + String.format("%.2f", estimatedBill));
-
-            System.out.println("Extra amount = ₹"
-                    + String.format("%.2f", extra));
-
-        } else {
-
-            double remaining = budget - estimatedBill;
-
-            System.out.println("Your estimated bill is within the budget.");
-            System.out.println("Remaining budget = ₹"
-                    + String.format("%.2f", remaining));
-        }
-
-        // ------------------------------------------------
-        // MAJOR CONSUMPTION SOURCES
-        // ------------------------------------------------
-
-        System.out.println("         MAJOR CONSUMPTION SOURCES");
-
-        for (int i = 0; i < n; i++) {
-
-            double percentage =
-                    (monthlyUnits[i] / totalUnits) * 100;
-
-            if (percentage >= 20) {
-
-                System.out.println(appliance[i]
-                        + " is a major consumption source.");
-
-                System.out.println("It uses "
-                        + String.format("%.2f", percentage)
-                        + "% of total electricity.");
-            }
-        }
-
-        // ------------------------------------------------
-        // PERSONALIZED RECOMMENDATIONS
-        // ------------------------------------------------
-
-        System.out.println("       PERSONALIZED SAVING SUGGESTIONS");
-
-        boolean suggestionFound = false;
-
-        for (int i = 0; i < n; i++) {
-
-            double percentage =
-                    (monthlyUnits[i] / totalUnits) * 100;
-
-            if (percentage >= 20) {
-
-                suggestionFound = true;
-
-                System.out.println("\nFor " + appliance[i] + ":");
-
-                if (hours[i] > 8) {
-
-                    System.out.println("- Usage is quite high.");
-                    System.out.println("- Try reducing daily usage.");
-                    System.out.println("- Avoid keeping it ON when not required.");
-
-                } else if (watt[i] > 1000) {
-
-                    System.out.println("- This appliance has high power consumption.");
-                    System.out.println("- Use an energy-efficient model if possible.");
-                    System.out.println("- Try to reduce unnecessary usage.");
-
-                } else {
-
-                    System.out.println("- Monitor its daily usage.");
-                    System.out.println("- Switch it OFF when not required.");
-                }
-            }
-        }
-
-        if (!suggestionFound) {
-
-            System.out.println("No appliance is consuming more than 20% individually.");
-            System.out.println("Your electricity usage is relatively distributed.");
-            System.out.println("Continue monitoring high-usage appliances.");
-        }
-
-        // ------------------------------------------------
-        // FINAL SUMMARY
-        // ------------------------------------------------
-
-        System.out.println("                 FINAL SUMMARY");
-
-        System.out.println("Total Appliances : " + n);
-
-        System.out.println("Monthly Consumption : "
-                + String.format("%.2f", totalUnits) + " kWh");
-
-        System.out.println("Estimated Bill : ₹"
-                + String.format("%.2f", estimatedBill));
-
-        System.out.println("Monthly Budget : ₹"
-                + String.format("%.2f", budget));
-
-        if (estimatedBill > budget) {
-            System.out.println("Status : OVER BUDGET");
-        } else {
-            System.out.println("Status : WITHIN BUDGET");
-        }
-
-        System.out.println("\nThank you for using Smart Energy Consumption Advisor!");
-
-        sc.close();
-    }
-}
+4. **Reporting & Data Persistence Module**
+   - Formatted console report with tabular output
+   - Report export to text file
+   - CSV save/load for appliance data
+   - Final summary on exit
