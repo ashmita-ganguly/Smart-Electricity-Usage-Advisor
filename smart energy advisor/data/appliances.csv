@@ -1,0 +1,4 @@
+Name,Wattage,DailyHours,MonthlyUnits,MonthlyCost
+AC,1500.0,6.0,270.0,2160.0
+Fan,75.0,8.0,18.0,144.0
+Fridge,200.0,24.0,144.0,1152.0

@@ -1,0 +1,15 @@
+==============================================
+    SMART ENERGY CONSUMPTION ADVISOR REPORT
+==============================================
+
+Appliance            Units(kWh)   Cost(Rs)     Share(%)  
+----------------------------------------------
+AC                   270.00       Rs 2160.00   62.5      
+Fan                  18.00        Rs 144.00    4.2       
+Fridge               144.00       Rs 1152.00   33.3      
+----------------------------------------------
+Total Consumption : 432.00 kWh
+Estimated Bill    : Rs 3456.00
+Monthly Budget    : Rs 2000.00
+Status            : OVER BUDGET by Rs 1456.00
+==============================================
