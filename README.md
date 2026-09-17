@@ -1,164 +1,280 @@
-# Smart Energy Advisor
+# Smart Energy Consumption Advisor
 
-A command-line Java application that estimates monthly household electricity consumption and cost from appliance data, ranks appliances by usage, checks the estimated bill against a budget, and generates personalized energy-saving recommendations.
+A Java-based console application that helps household users **track, analyze, and optimize** their electricity consumption. The system allows users to input appliance details (wattage, daily usage hours), calculates monthly energy consumption and estimated bills, ranks appliances by consumption, compares spending against a budget, and provides personalized energy-saving recommendations.
 
-## Overview
-
-Smart Energy Advisor walks the user through a straightforward console workflow: enter a monthly budget and the electricity rate, specify how many appliances to record, enter each appliance's details, and the application takes care of the rest — computing consumption, estimating the bill, ranking appliances, checking the result against the budget, generating saving recommendations, displaying a full report, and saving the session data for later reference.
-
-It requires no smart meters, sensors, or internet connection, and runs entirely offline from the terminal.
-
-### Application Workflow
-<img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/b92ba661-159e-466b-9a15-9c93cd49a4dc" />
+---
 
 ## Features
 
-- Set a monthly budget and electricity rate at the start of each session
-- Enter a fixed number of appliances with their wattage and daily usage hours
-- Calculate monthly energy consumption (kWh) per appliance and for the whole household
-- Calculate the estimated monthly electricity bill from the entered rate
-- Rank appliances from highest to lowest consumption
-- Check the estimated bill against the entered budget and flag any overage
-- Generate rule-based, appliance-specific saving recommendations
-- Display a complete, formatted report in the terminal
-- Save the session's input and results for later reference
+| Module | Description |
+|--------|-------------|
+| **Appliance Management** | Add household appliances with name, wattage, and daily usage hours |
+| **Energy Calculation** | Computes monthly energy consumption (kWh) using the formula: `(Watts × Hours × 30) / 1000` |
+| **Bill Estimation** | Calculates estimated monthly electricity bill based on per-unit rate |
+| **Appliance Ranking** | Ranks appliances from highest to lowest energy consumption |
+| **Budget Analysis** | Compares estimated bill against user's monthly budget with surplus/deficit reporting |
+| **Recommendation Engine** | Generates personalized energy-saving suggestions for high-consumption appliances |
+| **Consumption Analyzer** | Classifies consumption (Low/Medium/High/Very High), provides daily/monthly/yearly projections, identifies peak consumers |
+| **Data Persistence** | Save appliance data to CSV and load previously saved data |
+| **Report Export** | Export full analysis report to a text file |
 
-## Technologies / Tools Used
+---
 
-- **Language:** Java (JDK 8+, no external libraries)
-- **Build:** Plain `javac` compilation — no Maven/Gradle required
-- **Input:** Interactive console input
-- **Storage:** Local file output for saved session data
-- **Tested on:** OpenJDK 21, should work on JDK 8 and above
+## Technologies & Tools Used
 
-## Installation & Setup
+- **Language:** Java (JDK 8 or above)
+- **Core Libraries:** `java.util` (Scanner, ArrayList, Collections, Comparator), `java.io` (FileWriter, BufferedReader, FileReader), `java.util.logging` (Logger)
+- **Data Storage:** CSV file-based persistence (`data/appliances.csv`)
+- **Build:** Manual compilation using `javac` (no external build tool required)
+- **Version Control:** Git & GitHub
 
-### Prerequisites
-
-- JDK 8 or higher installed and available on your `PATH`
-
-Verify with:
-
-```bash
-java -version
-javac -version
-```
-
-### Clone the repository
-
-```bash
-git clone https://github.com/{github-username}/{repo-name}.git
-cd {repo-name}
-```
-
-### Compile
-
-```bash
-mkdir -p out
-javac -d out src/energy/*.java
-```
-
-On Windows:
-
-```cmd
-mkdir out
-javac -d out src\energy\*.java
-```
-
-## Running the Project
-
-```bash
-java -cp out energy.Main
-```
-
-You will be prompted in order:
-
-```
-Enter monthly budget: 2000
-Enter electricity rate (per kWh): 7.5
-Enter number of appliances: 3
-
-Appliance 1 name: Air Conditioner
-  Wattage (W): 1500
-  Daily usage (hours): 6
-
-Appliance 2 name: Refrigerator
-  Wattage (W): 150
-  Daily usage (hours): 24
-
-Appliance 3 name: LED Bulb
-  Wattage (W): 10
-  Daily usage (hours): 6
-```
-
-After the last appliance is entered, the report is calculated, displayed, and saved automatically.
-
-### Convenience script
-
-```bash
-./run.sh     # Linux / macOS
-run.bat      # Windows
-```
-
-## Testing Instructions
-
-1. Compile the project as described above.
-2. Run the program and enter a **low budget** (e.g. 1000) with typical appliance data to confirm the report flags the result as over budget with a specific recommendation.
-3. Run again with a **high budget** (e.g. 10000) to confirm the report shows the result as within budget.
-4. Enter **0 appliances** when prompted and confirm the program handles it gracefully instead of crashing.
-5. Enter an **invalid wattage or usage value** (e.g. negative number, or hours above 24) and confirm the program rejects it with a clear message and re-prompts rather than crashing.
-6. After a successful run, confirm a data file has been saved (check the working directory for the output file) and that its contents match what was displayed on screen.
-7. Re-run the program a second time and confirm the previous save does not interfere with a new session's input.
-
-## Sample Output
-
-```
-================================================================
-        SMART ENERGY CONSUMPTION REPORT
-================================================================
-Budget              : 2000.00
-Electricity rate    : 7.50 per kWh
-Total consumption   : 421.20 kWh
-Estimated bill      : 3159.00
-Status              : OVER BUDGET by 1159.00
-
-APPLIANCES RANKED BY CONSUMPTION
-1. Air Conditioner    270.00 kWh   64.1%
-2. Refrigerator       108.00 kWh   25.6%
-3. LED Bulb              1.80 kWh    0.4%
-
-RECOMMENDATIONS
-1. Air Conditioner accounts for 64% of total usage. Reducing
-   daily use by 2 hours would save approximately 90 kWh/month.
-2. Raise the Air Conditioner thermostat by 2 degrees to reduce
-   consumption by an estimated 10-15%.
-
-Report saved to session_report.txt
-================================================================
-```
-
-## Screenshots
-
-_Add a terminal screenshot of the input flow and the final report here, e.g.:_
-
-```markdown
-![Input flow](screenshots/input-flow.png)
-![Sample report](screenshots/report-output.png)
-```
+---
 
 ## Project Structure
 
 ```
-.
-├── src/energy/
-│   ├── Main.java            # CLI entry point and workflow driver
-│   ├── Appliance.java       # Appliance model
-│   ├── Calculator.java      # Consumption and bill calculations
-│   ├── Analyzer.java        # Ranking and budget check
-│   ├── Recommender.java     # Saving recommendations
-│   ├── ReportPrinter.java   # Report formatting and display
-│   └── DataStore.java       # Saves session data to file
-├── run.sh / run.bat         # Compile-and-run helpers
-└── README.md
+smart-energy-advisor/
+├── src/
+│   └── smartenergy/
+│       ├── Main.java                         # Entry point (menu-driven interface)
+│       ├── model/
+│       │   └── Appliance.java                # Data model for household appliances
+│       ├── service/
+│       │   ├── EnergyCalculator.java         # Monthly energy computation
+│       │   ├── BillCalculator.java           # Bill estimation
+│       │   ├── ApplianceRanking.java         # Sorting by consumption
+│       │   ├── BudgetAnalyzer.java           # Budget comparison & analysis
+│       │   ├── RecommendationEngine.java     # Energy-saving suggestions
+│       │   └── ConsumptionAnalyzer.java      # Advanced analytics & projections
+│       ├── report/
+│       │   └── ReportGenerator.java          # Formatted report generation
+│       └── utility/
+│           ├── InputValidator.java           # Input validation & error handling
+│           └── FileManager.java              # CSV file I/O & report export
+├── test/
+│   └── smartenergy/
+│       ├── service/
+│       │   ├── EnergyCalculatorTest.java     # Energy calculation tests
+│       │   ├── BillCalculatorTest.java       # Bill calculation tests
+│       │   └── BudgetAnalyzerTest.java       # Budget analysis tests
+│       └── model/
+│           └── ApplianceTest.java            # Appliance model tests
+├── data/                                     # Runtime output directory
+│   ├── appliances.csv                        # Saved appliance data
+│   └── energy_report.txt                     # Exported report
+├── README.md
+├── statement.md
+└── .gitignore
 ```
 
+---
+
+## How to Install & Run the Project
+
+### Prerequisites
+
+- **Java Development Kit (JDK) 8** or above must be installed
+- **VS Code** with the [Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack) installed (recommended)
+- Verify Java installation by opening a terminal and running:
+  ```bash
+  java -version
+  javac -version
+  ```
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/<your-username>/smart-energy-advisor.git
+cd smart-energy-advisor
+```
+
+### Step 2: Open in VS Code
+
+```bash
+code .
+```
+
+Or open VS Code → **File → Open Folder** → select the `smart-energy-advisor` folder.
+
+### Step 3: Compile All Source Files
+
+Open the **Terminal** in VS Code by pressing `` Ctrl + ` `` (backtick key), then run:
+
+```bash
+javac -d out src/smartenergy/model/Appliance.java src/smartenergy/service/*.java src/smartenergy/utility/*.java src/smartenergy/report/ReportGenerator.java src/smartenergy/Main.java
+```
+
+This compiles all Java files and places the `.class` files in the `out/` directory.
+
+### Step 4: Run the Application
+
+#### Method 1: Using VS Code Terminal (Recommended)
+
+In the same VS Code terminal, run:
+
+```bash
+java -cp out smartenergy.Main
+```
+
+> **Important:** Make sure you are typing in the **TERMINAL** tab at the bottom of VS Code (not the "Debug Console" or "Output" tab). The Terminal tab supports keyboard input; the Debug Console does not.
+
+#### Method 2: Using VS Code Debugger (F5)
+
+1. The project includes a `.vscode/launch.json` configuration file
+2. Press **F5** or go to **Run → Start Debugging**
+3. Select **"Smart Energy Advisor"** from the dropdown if prompted
+4. The program will start in the **integrated terminal** where you can type inputs
+
+> **Note:** If input is not working when using F5, make sure `launch.json` contains `"console": "integratedTerminal"`. This is already configured in the project.
+
+#### Method 3: Using External Command Prompt
+
+If VS Code terminal still has issues, open **Windows Command Prompt** or **PowerShell** directly:
+
+1. Press `Win + R`, type `cmd`, press Enter
+2. Navigate to the project folder:
+   ```bash
+   cd "C:\Users\techa\OneDrive\Desktop\smart energy advisor"
+   ```
+3. Run the program:
+   ```bash
+   java -cp out smartenergy.Main
+   ```
+
+### Step 5: Using the Application
+
+When the application starts, you will see a welcome banner and be asked to enter:
+1. **Monthly electricity budget** (in Rs)
+2. **Electricity rate per unit** (in Rs/kWh)
+
+Then you will see the main menu:
+
+```
+==================== MENU ====================
+  1. Add Appliances
+  2. View Energy Report
+  3. View Appliance Ranking
+  4. View Budget Analysis
+  5. View Energy Saving Recommendations
+  6. View Detailed Consumption Analysis
+  7. Load Previously Saved Data
+  8. Save Data & Export Report
+  9. Exit
+================================================
+```
+
+Type a number (1-9) and press **Enter** to select an option.
+
+### Troubleshooting: Input Not Working
+
+If you type a number but pressing Enter does nothing:
+
+| Problem | Solution |
+|---------|----------|
+| Using **Debug Console** tab | Switch to the **Terminal** tab at the bottom of VS Code |
+| VS Code terminal frozen | Open an external Command Prompt and run `java -cp out smartenergy.Main` |
+| Program not compiled | Run the `javac` compile command from Step 3 first |
+
+---
+
+## How to Run Tests
+
+### Step 1: Compile Test Files
+
+```bash
+javac -d out -cp out test/smartenergy/model/ApplianceTest.java test/smartenergy/service/EnergyCalculatorTest.java test/smartenergy/service/BillCalculatorTest.java test/smartenergy/service/BudgetAnalyzerTest.java
+```
+
+### Step 2: Run Each Test
+
+```bash
+java -cp out smartenergy.model.ApplianceTest
+java -cp out smartenergy.service.EnergyCalculatorTest
+java -cp out smartenergy.service.BillCalculatorTest
+java -cp out smartenergy.service.BudgetAnalyzerTest
+```
+
+### Expected Output (All Tests Passing)
+
+```
+========== Appliance Model Tests ==========
+  PASS: Name getter
+  PASS: Wattage getter
+  PASS: DailyHours getter
+  PASS: setMonthlyUnits
+  PASS: setMonthlyCost
+  PASS: toString format
+  PASS: Default monthlyUnits
+  PASS: Default monthlyCost
+--- Results ---
+Passed: 8
+Failed: 0
+```
+
+---
+
+## Sample Input / Output
+
+**Input:**
+```
+Monthly Budget: 2000
+Rate per unit: 8
+Appliances:
+  1. AC      - 1500W, 6 hours/day
+  2. Fan     - 75W,   8 hours/day
+  3. Fridge  - 200W,  24 hours/day
+```
+
+**Output (Energy Report):**
+```
+==============================================
+       SMART ENERGY CONSUMPTION REPORT
+==============================================
+Appliance            Units(kWh)   Cost(Rs)     Share(%)
+----------------------------------------------
+AC                   270.00       Rs 2160.00   54.5
+Fan                  18.00        Rs 144.00    3.6
+Fridge               144.00       Rs 1152.00   29.1
+----------------------------------------------
+Total Consumption : 432.00 kWh
+Estimated Bill    : Rs 3456.00
+==============================================
+```
+
+---
+
+## Non-Functional Requirements
+
+| Requirement | Implementation |
+|-------------|---------------|
+| **Performance** | O(n log n) sorting via `Collections.sort()`, single-pass calculations |
+| **Usability** | Menu-driven interface, clear prompts, formatted tabular reports |
+| **Reliability** | Input validation with retry loops prevents runtime crashes |
+| **Error Handling** | `try-catch` blocks for file I/O and `NumberFormatException` |
+| **Maintainability** | Modular 4-package architecture with separation of concerns |
+| **Scalability** | `ArrayList` for dynamic sizing, no hardcoded limits |
+
+---
+
+## Future Enhancements
+
+- Graphical User Interface (GUI) using JavaFX or Swing
+- Database integration (MySQL/SQLite) for persistent storage
+- Multi-user support with login authentication
+- Time-of-Use (ToU) tariff calculations
+- Appliance scheduling and automation suggestions
+- Comparison with national/state energy consumption averages
+- Integration with smart meter APIs for real-time data
+
+---
+
+## Author
+
+**Ashmita Ganguly**  
+VIT Bhopal University
+
+---
+
+## License
+
+This project is developed for academic purposes as part of the VITyarthi coursework.
