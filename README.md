@@ -194,54 +194,11 @@ java -cp out smartenergy.service.BillCalculatorTest
 java -cp out smartenergy.service.BudgetAnalyzerTest
 ```
 
-### Expected Output (All Tests Passing)
-
-```
-========== Appliance Model Tests ==========
-  PASS: Name getter
-  PASS: Wattage getter
-  PASS: DailyHours getter
-  PASS: setMonthlyUnits
-  PASS: setMonthlyCost
-  PASS: toString format
-  PASS: Default monthlyUnits
-  PASS: Default monthlyCost
---- Results ---
-Passed: 8
-Failed: 0
-```
-
----
-
 ## Sample Input / Output
+<img width="1207" height="866" alt="image" src="https://github.com/user-attachments/assets/91d2c33d-6e3b-4c24-ba50-4a42a6004fc8" />
+<img width="1172" height="853" alt="image" src="https://github.com/user-attachments/assets/4c6aa9e8-a850-4916-86b3-455abe8c0169" />
+<img width="1170" height="866" alt="image" src="https://github.com/user-attachments/assets/ef56d8e9-60eb-4fdc-b4e4-9e46ee100279" />
 
-**Input:**
-```
-Monthly Budget: 2000
-Rate per unit: 8
-Appliances:
-  1. AC      - 1500W, 6 hours/day
-  2. Fan     - 75W,   8 hours/day
-  3. Fridge  - 200W,  24 hours/day
-```
-
-**Output (Energy Report):**
-```
-==============================================
-       SMART ENERGY CONSUMPTION REPORT
-==============================================
-Appliance            Units(kWh)   Cost(Rs)     Share(%)
-----------------------------------------------
-AC                   270.00       Rs 2160.00   54.5
-Fan                  18.00        Rs 144.00    3.6
-Fridge               144.00       Rs 1152.00   29.1
-----------------------------------------------
-Total Consumption : 432.00 kWh
-Estimated Bill    : Rs 3456.00
-==============================================
-```
-
----
 
 ## Non-Functional Requirements
 
