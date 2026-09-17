@@ -162,6 +162,3 @@ _Add a terminal screenshot of the input flow and the final report here, e.g.:_
 └── README.md
 ```
 
-## License
-
-MIT
