@@ -196,8 +196,11 @@ java -cp out smartenergy.service.BudgetAnalyzerTest
 
 ## Sample Input / Output
 <img width="1207" height="866" alt="image" src="https://github.com/user-attachments/assets/91d2c33d-6e3b-4c24-ba50-4a42a6004fc8" />
-<img width="1172" height="853" alt="image" src="https://github.com/user-attachments/assets/4c6aa9e8-a850-4916-86b3-455abe8c0169" />
-<img width="1170" height="866" alt="image" src="https://github.com/user-attachments/assets/ef56d8e9-60eb-4fdc-b4e4-9e46ee100279" />
+<img width="1175" height="860" alt="Screenshot 2026-09-18 084352" src="https://github.com/user-attachments/assets/05142c3e-341d-46aa-9963-34b300def465" />
+<img width="1168" height="892" alt="Screenshot 2026-09-18 084436" src="https://github.com/user-attachments/assets/898f9a8c-b824-4675-ae8d-b0bfd4580412" />
+<img width="1181" height="882" alt="Screenshot 2026-09-18 084548" src="https://github.com/user-attachments/assets/0c16a7bd-78e0-465a-be93-35d48ffb412c" />
+<img width="1170" height="872" alt="Screenshot 2026-09-18 084628" src="https://github.com/user-attachments/assets/f89a9156-b46e-4a08-b97e-acaa48ed1ae6" />
+<img width="1158" height="875" alt="Screenshot 2026-09-18 084729" src="https://github.com/user-attachments/assets/df29a2a1-406f-4c93-9ac3-f4d9285f88bf" />
 
 
 ## Non-Functional Requirements
